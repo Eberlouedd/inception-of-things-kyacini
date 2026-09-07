@@ -1,0 +1,6 @@
+.DS_Store
+.vagrant/
+**/.vagrant/
+.k3s-token
+*.log
+
