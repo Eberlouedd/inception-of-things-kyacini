@@ -1,19 +1,25 @@
 # frozen_string_literal: true
 
-LOGIN = ENV.fetch("IOT_LOGIN", "iot")
+LOGIN = ENV.fetch("IOT_LOGIN", "kyacini")
 BOX = ENV.fetch("VAGRANT_BOX", "bento/ubuntu-24.04")
-PROVIDER = ENV.fetch("VAGRANT_PROVIDER", "virtualbox")
+PROVIDER = ENV.fetch("VAGRANT_PROVIDER", "libvirt")
 
 Vagrant.configure("2") do |config|
   config.vm.box = BOX
   config.ssh.insert_key = false
-
+  config.vm.synced_folder ".", "/vagrant", type: "rsync"
+  config.vm.provider "libvirt" do |provider|
+    provider.driver = "qemu"
+    provider.cpu_mode = "custom"
+    provider.cpu_model = "qemu64"
+    provider.cpu_fallback = "allow"
+  end
   config.vm.define "#{LOGIN}S" do |server|
     server.vm.hostname = "#{LOGIN}S"
     server.vm.network "private_network", ip: "192.168.56.110"
     server.vm.provider PROVIDER do |provider|
-      provider.cpus = 1
-      provider.memory = 1024
+      provider.cpus = 2
+      provider.memory = 2048
       provider.name = "#{LOGIN}S-p2" if provider.respond_to?(:name=)
     end
     server.vm.provision "shell", path: "scripts/server.sh"

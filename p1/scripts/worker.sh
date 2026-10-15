@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-for _ in $(seq 1 120); do
-  test -s /vagrant/.k3s-token && break
-  sleep 2
-done
-test -s /vagrant/.k3s-token || { echo "K3s server token was not created" >&2; exit 1; }
+TOKEN_FILE="/etc/rancher/k3s/cluster-token"
+
+test -s "$TOKEN_FILE" || {
+  echo "Missing K3s token: $TOKEN_FILE" >&2
+  exit 1
+}
 
 export K3S_URL="https://192.168.56.110:6443"
-export K3S_TOKEN
-K3S_TOKEN=$(cat /vagrant/.k3s-token)
+export K3S_TOKEN_FILE="$TOKEN_FILE"
 export INSTALL_K3S_EXEC="agent --node-ip=192.168.56.111"
-curl -sfL https://get.k3s.io | sh -
 
+if ! systemctl list-unit-files k3s-agent.service --no-legend 2>/dev/null | grep -q '^k3s-agent.service'; then
+  curl -sfL https://get.k3s.io | sh -
+fi
+
+systemctl enable --now k3s-agent

@@ -2,8 +2,8 @@
 set -Eeuo pipefail
 
 ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-CLUSTER_NAME=${CLUSTER_NAME:-iot}
-GIT_REPO=${GIT_REPO:-}
+CLUSTER_NAME=${CLUSTER_NAME:-kyacini}
+GIT_REPO="https://github.com/Eberlouedd/inception-of-things-kyacini.git"
 GIT_REVISION=${GIT_REVISION:-main}
 
 for command in docker k3d kubectl; do
