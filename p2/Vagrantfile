@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 LOGIN = ENV.fetch("IOT_LOGIN", "kyacini")
-BOX = ENV.fetch("VAGRANT_BOX", "bento/ubuntu-24.04")
+BOX = ENV.fetch("VAGRANT_BOX", "cloud-image/debian-13")
 PROVIDER = ENV.fetch("VAGRANT_PROVIDER", "libvirt")
 
 Vagrant.configure("2") do |config|

@@ -24,8 +24,8 @@ fi
 
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl wait -n argocd --for=condition=Available deployment --all --timeout=300s
+kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl wait -n argocd --for=condition=Available deployment --all --timeout=900s
 
 sed -e "s|__GIT_REPO__|$GIT_REPO|g" \
     -e "s|__GIT_REVISION__|$GIT_REVISION|g" \
