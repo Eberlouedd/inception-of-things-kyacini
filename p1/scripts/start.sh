@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 LOGIN="${IOT_LOGIN:-kyacini}"
 SERVER="${LOGIN}S"
